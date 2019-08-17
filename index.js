@@ -6,9 +6,13 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
+// ==== Configuration
+app.set('port',process.env.PORT || 8000);
+
 app.get('/',function(request,response) {
     response.render('index.ejs');
 });
+
 // dealing with socket.io
 io.sockets.on('connection',function(socket) {
     // ketika ada user yang masuk / join ke chat
@@ -25,6 +29,6 @@ io.sockets.on('connection',function(socket) {
         io.emit('chat_message','<strong>' + socket.username + '</strong> : ' + message);
     });
 });
-const server = http.listen(8000,function() {
+const server = http.listen(app.get('port'),function() {
     console.log('listening on *:8000');
 });
